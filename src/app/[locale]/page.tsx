@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AccountDetails } from "@/components/banking/account-details";
+import { FadeIn } from "@/components/fade-in";
 import { demoAccount } from "@/lib/account-data";
 
 export default async function Home({
@@ -34,7 +35,9 @@ export default async function Home({
         <LocaleSwitcher />
       </div>
 
-      <AccountDetails account={demoAccount} />
+      <FadeIn transitionKey={locale}>
+        <AccountDetails account={demoAccount} />
+      </FadeIn>
     </div>
   );
 }

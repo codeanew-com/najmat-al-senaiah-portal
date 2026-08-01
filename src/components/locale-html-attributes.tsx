@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useLocale } from "next-intl";
 import { localeDirections, type Locale } from "@/i18n/config";
 
@@ -14,7 +14,7 @@ import { localeDirections, type Locale } from "@/i18n/config";
 export function LocaleHtmlAttributes() {
   const locale = useLocale() as Locale;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = localeDirections[locale];
   }, [locale]);
