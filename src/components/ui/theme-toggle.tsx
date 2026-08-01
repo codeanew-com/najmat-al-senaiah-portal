@@ -1,7 +1,5 @@
 "use client";
 
-import { setThemeCookie } from "@/lib/theme-cookie";
-
 const STORAGE_KEY = "theme";
 
 function toggle() {
@@ -9,7 +7,6 @@ function toggle() {
   const next = current === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", next);
   localStorage.setItem(STORAGE_KEY, next);
-  setThemeCookie(next);
 }
 
 export function ThemeToggle({ ariaLabel }: { ariaLabel: string }) {
