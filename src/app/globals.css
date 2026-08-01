@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #0066cc;
+  --color-primary-focus: #0071e3;
+  --color-primary-on-dark: #2997ff;
+
+  /* Adaptive: flips with the device's color scheme */
+  --color-ink: #1d1d1f;
+  --color-ink-muted-80: #333333;
+  --color-ink-muted-48: #7a7a7a;
+  --color-hairline: #e0e0e0;
+  --color-canvas: #ffffff;
+  --color-canvas-parchment: #f5f5f7;
+  --color-surface-pearl: #fafafc;
+
+  --background: var(--color-canvas-parchment);
+  --foreground: var(--color-ink);
+}
+
+/*
+ * The theme cookie (see layout.tsx) lets the server render the correct
+ * [data-theme] attribute directly in the SSR HTML for every request after the
+ * first, so there's no client-side race to win. This media-query block only
+ * matters for the true first-ever visit, before any cookie exists — guarded
+ * on the attribute being entirely ABSENT (not merely != "dark"), so it never
+ * fights an explicit server-rendered choice either direction.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-ink: #f5f5f7;
+    --color-ink-muted-80: #d2d2d7;
+    --color-ink-muted-48: #86868b;
+    --color-hairline: #333336;
+    --color-canvas: #1d1d1f;
+    --color-canvas-parchment: #000000;
+    --color-surface-pearl: #161617;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-ink: #f5f5f7;
+  --color-ink-muted-80: #d2d2d7;
+  --color-ink-muted-48: #86868b;
+  --color-hairline: #333336;
+  --color-canvas: #1d1d1f;
+  --color-canvas-parchment: #000000;
+  --color-surface-pearl: #161617;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-focus: var(--color-primary-focus);
+  --color-primary-on-dark: var(--color-primary-on-dark);
+  --color-ink: var(--color-ink);
+  --color-ink-muted-80: var(--color-ink-muted-80);
+  --color-ink-muted-48: var(--color-ink-muted-48);
+  --color-hairline: var(--color-hairline);
+  --color-canvas: var(--color-canvas);
+  --color-canvas-parchment: var(--color-canvas-parchment);
+  --color-surface-pearl: var(--color-surface-pearl);
+  --font-sans: var(--font-inter);
+  --font-mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ThemeToggle icon swap: driven purely by CSS (attribute or, absent that, the
+   same media-query fallback used for colors above), never by React state, so
+   there's no flash from a client render correcting itself after hydration. */
+.theme-icon-sun {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-icon-sun {
+    display: block;
+  }
+  :root:not([data-theme]) .theme-icon-moon {
+    display: none;
+  }
+}
+:root[data-theme="dark"] .theme-icon-sun {
+  display: block;
+}
+:root[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}

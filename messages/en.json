@@ -1,0 +1,24 @@
+{
+  "app": {
+    "title": "Bank Info",
+    "description": "Beautifully view your banking details"
+  },
+  "account": {
+    "accountName": "Account Name",
+    "bank": "Bank",
+    "accountNumber": "Account Number",
+    "iban": "IBAN",
+    "swiftCode": "SWIFT Code",
+    "accountType": "Account Type"
+  },
+  "language": {
+    "switch": "Language"
+  },
+  "theme": {
+    "toggle": "Toggle theme"
+  },
+  "common": {
+    "copy": "Copy",
+    "copied": "Copied"
+  }
+}

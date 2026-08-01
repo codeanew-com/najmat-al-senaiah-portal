@@ -1,0 +1,24 @@
+{
+  "app": {
+    "title": "معلومات البنك",
+    "description": "اعرض تفاصيل حسابك المصرفي بأناقة"
+  },
+  "account": {
+    "accountName": "اسم الحساب",
+    "bank": "البنك",
+    "accountNumber": "رقم الحساب",
+    "iban": "رقم الحساب الدولي (IBAN)",
+    "swiftCode": "رمز السويفت",
+    "accountType": "نوع الحساب"
+  },
+  "language": {
+    "switch": "اللغة"
+  },
+  "theme": {
+    "toggle": "تبديل المظهر"
+  },
+  "common": {
+    "copy": "نسخ",
+    "copied": "تم النسخ"
+  }
+}
