@@ -3,20 +3,31 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-export function CopyButton({ value }: { value: string }) {
+export function useCopyToClipboard() {
   const [copied, setCopied] = useState(false);
-  const t = useTranslations("common");
 
-  async function handleCopy() {
+  async function copy(value: string) {
     await navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   }
 
+  return { copied, copy };
+}
+
+export function CopyButton({
+  copied,
+  onClick,
+}: {
+  copied: boolean;
+  onClick: () => void;
+}) {
+  const t = useTranslations("common");
+
   return (
     <button
       type="button"
-      onClick={handleCopy}
+      onClick={onClick}
       aria-label={copied ? t("copied") : t("copy")}
       className="flex h-11 w-11 shrink-0 items-center justify-center rounded-pill bg-surface-pearl text-ink-muted-80 transition active:scale-95 hover:bg-hairline/40"
     >

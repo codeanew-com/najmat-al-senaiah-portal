@@ -1,6 +1,9 @@
 export interface AccountData {
   accountName: string;
   bank: string;
+  /** Official Latin-script bank name as registered with SWIFT — this is what
+   * transfer forms expect, regardless of the UI locale. Don't localize it. */
+  bankNameOfficial: string;
   accountNumber: string;
   iban: string;
   swiftCode: string;
@@ -14,6 +17,7 @@ export interface AccountData {
 export const demoAccount: AccountData = {
   accountName: "NAJMAT AL SENAIAH SUPERMARKET",
   bank: "ADIB",
+  bankNameOfficial: "Abu Dhabi Islamic Bank",
   accountNumber: "19662556",
   iban: "AE1605000000000019662556",
   swiftCode: "ABDIAEADXXX",

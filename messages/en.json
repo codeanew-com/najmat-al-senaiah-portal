@@ -6,6 +6,7 @@
   "account": {
     "accountName": "Account Name",
     "bank": "Bank",
+    "bankNameValue": "Abu Dhabi Islamic Bank",
     "accountNumber": "Account Number",
     "iban": "IBAN",
     "swiftCode": "SWIFT Code",
