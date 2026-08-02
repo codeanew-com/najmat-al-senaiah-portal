@@ -19,6 +19,13 @@ function isAuthorized(request: NextRequest): boolean {
  * until the next unrelated /admin save.
  */
 export async function POST(request: NextRequest) {
+  if (!process.env.REVALIDATE_SECRET) {
+    return NextResponse.json(
+      { error: "REVALIDATE_SECRET is not set on the server" },
+      { status: 500 }
+    );
+  }
+
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
