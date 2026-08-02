@@ -3,7 +3,7 @@ import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AccountDetails } from "@/components/banking/account-details";
 import { FadeIn } from "@/components/fade-in";
-import { demoAccount } from "@/lib/account-data";
+import { getAccountData } from "@/lib/account-repo";
 
 export default async function Home({
   params,
@@ -25,7 +25,7 @@ export default async function Home({
       }}
     >
       <div
-        className="absolute top-6 end-6 flex items-center gap-2"
+        className="absolute top-6 inset-e-6 flex items-center gap-2"
         style={{
           top: "max(1.5rem, calc(env(safe-area-inset-top) + 0.5rem))",
           insetInlineEnd: "max(1.5rem, env(safe-area-inset-right))",
@@ -36,7 +36,7 @@ export default async function Home({
       </div>
 
       <FadeIn transitionKey={locale}>
-        <AccountDetails account={demoAccount} />
+        <AccountDetails account={getAccountData()} locale={locale} />
       </FadeIn>
     </div>
   );

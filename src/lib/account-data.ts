@@ -1,25 +1,35 @@
 export interface AccountData {
+  bankNameOfficialEn: string;
+  bankNameOfficialAr: string;
+  accountTypeEn: string;
+  accountTypeAr: string;
   accountName: string;
-  bank: string;
-  /** Official Latin-script bank name as registered with SWIFT — this is what
-   * transfer forms expect, regardless of the UI locale. Don't localize it. */
-  bankNameOfficial: string;
-  accountNumber: string;
   iban: string;
+  accountNumber: string;
   swiftCode: string;
-  accountType: string;
 }
 
-/**
- * Static placeholder data for the demo reveal UI.
- * Swap with a real fetch once a backend/QR payload source exists.
- */
-export const demoAccount: AccountData = {
+export const defaultAccount: AccountData = {
+  bankNameOfficialEn: "Abu Dhabi Islamic Bank",
+  bankNameOfficialAr: "بنك أبوظبي الإسلامي",
+  accountTypeEn: "Corporate Account",
+  accountTypeAr: "حساب تجاري",
   accountName: "NAJMAT AL SENAIAH SUPERMARKET",
-  bank: "ADIB",
-  bankNameOfficial: "Abu Dhabi Islamic Bank",
-  accountNumber: "19662556",
   iban: "AE1605000000000019662556",
+  accountNumber: "19662556",
   swiftCode: "ABDIAEADXXX",
-  accountType: "Corporate Account",
 };
+
+export type AccountField =
+  | { type: "text"; key: keyof AccountData; label: string }
+  | { type: "bilingual"; enKey: keyof AccountData; arKey: keyof AccountData; label: string };
+
+/** Same order as the public homepage displays these fields. */
+export const ACCOUNT_FIELDS: AccountField[] = [
+  { type: "bilingual", enKey: "bankNameOfficialEn", arKey: "bankNameOfficialAr", label: "Bank (official name)" },
+  { type: "bilingual", enKey: "accountTypeEn", arKey: "accountTypeAr", label: "Account type" },
+  { type: "text", key: "accountName", label: "Account name" },
+  { type: "text", key: "iban", label: "IBAN" },
+  { type: "text", key: "accountNumber", label: "Account number" },
+  { type: "text", key: "swiftCode", label: "SWIFT code" },
+];

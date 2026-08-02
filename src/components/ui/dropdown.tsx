@@ -50,7 +50,7 @@ export function Dropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={ariaLabel}
-        className="flex h-9 items-center gap-1.5 rounded-sm border border-hairline bg-canvas px-[15px] text-[14px] leading-none tracking-[-0.224px] text-ink transition active:scale-95"
+        className="flex h-9 items-center gap-1.5 rounded-sm border border-hairline bg-canvas px-3.75 text-[14px] leading-none tracking-[-0.224px] text-ink transition active:scale-95"
       >
         {selected?.label}
         <svg
@@ -71,7 +71,7 @@ export function Dropdown({
         <ul
           role="listbox"
           aria-label={ariaLabel}
-          className="absolute end-0 z-50 mt-2 min-w-[9rem] overflow-hidden rounded-md border border-ink-muted-48/20 bg-canvas py-1 shadow-[0_4px_20px_rgba(0,0,0,0.16)]"
+          className="absolute inset-e-0 z-50 mt-2 min-w-36 overflow-hidden rounded-md border border-ink-muted-48/20 bg-canvas py-1 shadow-[0_4px_20px_rgba(0,0,0,0.16)]"
         >
           {options.map((option) => (
             <li key={option.value} role="option" aria-selected={option.value === value}>

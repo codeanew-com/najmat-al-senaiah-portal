@@ -6,7 +6,6 @@
   "account": {
     "accountName": "اسم الحساب",
     "bank": "البنك",
-    "bankNameValue": "بنك أبوظبي الإسلامي",
     "accountNumber": "رقم الحساب",
     "iban": "رقم الحساب الدولي (IBAN)",
     "swiftCode": "رمز السويفت",
@@ -20,6 +19,7 @@
   },
   "common": {
     "copy": "نسخ",
-    "copied": "تم النسخ"
+    "copied": "تم النسخ",
+    "share": "مشاركة"
   }
 }
