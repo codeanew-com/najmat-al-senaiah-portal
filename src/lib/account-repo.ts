@@ -25,12 +25,30 @@ function rowToAccountData(row: AccountRow): AccountData {
   };
 }
 
+/**
+ * First-run seed values. Prefers env vars (real data, kept out of source
+ * control) over the generic placeholder in account-data.ts.
+ */
+function seedAccountFromEnv(): AccountData {
+  return {
+    bankNameOfficialEn: process.env.SEED_BANK_NAME_OFFICIAL_EN || defaultAccount.bankNameOfficialEn,
+    bankNameOfficialAr: process.env.SEED_BANK_NAME_OFFICIAL_AR || defaultAccount.bankNameOfficialAr,
+    accountTypeEn: process.env.SEED_ACCOUNT_TYPE_EN || defaultAccount.accountTypeEn,
+    accountTypeAr: process.env.SEED_ACCOUNT_TYPE_AR || defaultAccount.accountTypeAr,
+    accountName: process.env.SEED_ACCOUNT_NAME || defaultAccount.accountName,
+    iban: process.env.SEED_IBAN || defaultAccount.iban,
+    accountNumber: process.env.SEED_ACCOUNT_NUMBER || defaultAccount.accountNumber,
+    swiftCode: process.env.SEED_SWIFT_CODE || defaultAccount.swiftCode,
+  };
+}
+
 export function getAccountData(): AccountData {
   const row = db.prepare("SELECT * FROM account WHERE id = 1").get() as AccountRow | undefined;
   if (row) return rowToAccountData(row);
 
-  saveAccountData(defaultAccount);
-  return defaultAccount;
+  const seed = seedAccountFromEnv();
+  saveAccountData(seed);
+  return seed;
 }
 
 export function saveAccountData(data: AccountData): void {

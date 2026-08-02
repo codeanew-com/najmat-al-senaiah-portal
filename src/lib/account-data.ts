@@ -9,15 +9,20 @@ export interface AccountData {
   swiftCode: string;
 }
 
+/**
+ * Placeholder only — deliberately not real data, since this file is bundled
+ * for the client (via ACCOUNT_FIELDS/AccountData below) and this repo is public.
+ * Real values are seeded from env vars server-side; see account-repo.ts.
+ */
 export const defaultAccount: AccountData = {
-  bankNameOfficialEn: "Abu Dhabi Islamic Bank",
-  bankNameOfficialAr: "بنك أبوظبي الإسلامي",
-  accountTypeEn: "Corporate Account",
-  accountTypeAr: "حساب تجاري",
-  accountName: "NAJMAT AL SENAIAH SUPERMARKET",
-  iban: "AE1605000000000019662556",
-  accountNumber: "19662556",
-  swiftCode: "ABDIAEADXXX",
+  bankNameOfficialEn: "Your Bank Name",
+  bankNameOfficialAr: "اسم البنك",
+  accountTypeEn: "Account Type",
+  accountTypeAr: "نوع الحساب",
+  accountName: "Your Account Name",
+  iban: "AE00 0000 0000 0000 0000 000",
+  accountNumber: "000000000",
+  swiftCode: "XXXXXXXX",
 };
 
 export type AccountField =
