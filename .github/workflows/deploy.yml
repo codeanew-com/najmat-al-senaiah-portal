@@ -1,0 +1,111 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # output: "standalone" doesn't copy static assets by default (they're
+      # meant to be served by a CDN); for a plain VPS deploy we bundle them
+      # in so `server.js` serves everything itself.
+      - name: Assemble standalone bundle
+        run: cp -r .next/static .next/standalone/.next/static
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_KEY }}
+
+      - name: Trust VPS host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Ensure remote project path exists
+        env:
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PROJECT_PATH: ${{ secrets.VPS_PROJECT_PATH }}
+        run: |
+          ssh "$VPS_USERNAME@$VPS_HOST" "mkdir -p $(printf %q "$VPS_PROJECT_PATH")"
+
+      # Ships only built output + traced node_modules — the server never
+      # runs git or npm install. --exclude on data/ and .env* protects the
+      # persistent SQLite DB and server-side secrets from ever being touched,
+      # even though neither exists in this workflow's own build output.
+      - name: Upload build to VPS
+        env:
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PROJECT_PATH: ${{ secrets.VPS_PROJECT_PATH }}
+        run: |
+          rsync -az --delete \
+            --exclude 'data' \
+            --exclude '.env*' \
+            .next/standalone/ \
+            "$VPS_USERNAME@$VPS_HOST:$VPS_PROJECT_PATH/"
+
+      - name: Restart app and verify
+        env:
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PROJECT_PATH: ${{ secrets.VPS_PROJECT_PATH }}
+          VPS_PM2_APP_NAME: ${{ secrets.VPS_PM2_APP_NAME }}
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+        run: |
+          ssh "$VPS_USERNAME@$VPS_HOST" \
+            "VPS_PROJECT_PATH=$(printf %q "$VPS_PROJECT_PATH") \
+             VPS_PM2_APP_NAME=$(printf %q "$VPS_PM2_APP_NAME") \
+             REVALIDATE_SECRET=$(printf %q "$REVALIDATE_SECRET") \
+             bash -s" <<'REMOTE_SCRIPT'
+            set -euo pipefail
+
+            # Non-interactive SSH sessions often skip .bashrc, which is where
+            # nvm-managed node/npm/pm2 usually get put on PATH.
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            cd "$VPS_PROJECT_PATH"
+
+            if pm2 describe "$VPS_PM2_APP_NAME" > /dev/null 2>&1; then
+              pm2 restart "$VPS_PM2_APP_NAME" --update-env
+            else
+              PORT=4000 pm2 start server.js --name "$VPS_PM2_APP_NAME" --cwd "$VPS_PROJECT_PATH"
+            fi
+            pm2 save
+
+            for i in $(seq 1 15); do
+              curl -sf http://localhost:4000/ar > /dev/null && break
+              sleep 1
+            done
+            curl -sf http://localhost:4000/ar > /dev/null || {
+              echo "App did not respond after restart"
+              exit 1
+            }
+
+            curl -sf -X POST http://localhost:4000/api/revalidate \
+              -H "x-revalidate-secret: $REVALIDATE_SECRET" > /dev/null
+          REMOTE_SCRIPT

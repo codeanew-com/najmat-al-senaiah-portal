@@ -1,6 +1,6 @@
-# Najmat Bank Details
+# Najmat Al Senaiah Portal
 
-A minimal, elegant page for sharing bank account details — bilingual (Arabic/English), with a private admin panel for updating the details without redeploying.
+A minimal, elegant page for sharing Najmat Al Senaiah Supermarket's bank account details — bilingual (Arabic/English), with a private admin panel for updating the details without redeploying.
 
 ## Features
 
