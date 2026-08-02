@@ -8,6 +8,7 @@ fs.mkdirSync(dataDir, { recursive: true });
 export const db = new DatabaseSync(path.join(dataDir, "admin.sqlite"));
 
 db.exec(`
+  PRAGMA busy_timeout = 5000;
   PRAGMA journal_mode = WAL;
 
   CREATE TABLE IF NOT EXISTS account (
